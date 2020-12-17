@@ -1,6 +1,8 @@
 # TODO
 
 ```
+usage: todo [<flags>] <command> [<args> ...]
+
 A command-line tool for monitoring TODOs.
 
 Flags:
@@ -11,12 +13,12 @@ Commands:
   help [<command>...]
     Show help.
 
+  assert well-formed-todos-only
+    Fails if there are TODOs that don't conform to the expected format.
+
   report terminal
     Returns a report in terminal output.
 
   report webpage [<flags>]
     Generates a static web page for the report.
-
-  assert no-bad-todos
-    Fails if there are TODOs that can't be parsed.
 ```

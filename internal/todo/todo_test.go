@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-
 func TestValidTodosCanBeCreated(t *testing.T) {
 	validTodos := []string{
 		"// TODO(asdf): asdfas",

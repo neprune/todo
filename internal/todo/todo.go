@@ -38,8 +38,8 @@ func NewTodo(line string, filepath string, number int) (*Todo, error) {
 		return nil, fmt.Errorf("invalid construction: line does not contain TODO: %s", line)
 	}
 	return &Todo{
-		Line: line,
-		Filepath: filepath,
+		Line:       line,
+		Filepath:   filepath,
 		LineNumber: number,
 	}, nil
 }
