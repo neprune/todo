@@ -42,7 +42,7 @@ func TestInvalidTodosCantBeCreated(t *testing.T) {
 	}
 }
 
-func TestWellFormedTodosCanBeCreatedFromTodos(t *testing.T) {
+func TestWellFormedTodosCanBeParsedFromTodos(t *testing.T) {
 	wellFormedTodos := []string{
 		"// TODO(TICKET-1 2020-12-17): asdfas",
 		"#TODO(TICKET-1 2020-12-17): asdfas",
@@ -54,15 +54,15 @@ func TestWellFormedTodosCanBeCreatedFromTodos(t *testing.T) {
 		t.Run(fmt.Sprintf("verify %s is well formed", wt), func(t *testing.T) {
 			nt, err := NewTodo(wt, "filepath", 1337)
 			require.NoError(t, err)
-			nwt, err := nt.GetWellFormedTodo()
-			require.NoError(t, err)
-			require.Equal(t, "filepath", nwt.Filepath)
-			require.Equal(t, 1337, nwt.LineNumber)
-			require.Equal(t, wt, nwt.Line)
-			require.Equal(t, 2020, nwt.Date.Year())
-			require.Equal(t, time.December, nwt.Date.Month())
-			require.Equal(t, 17, nwt.Date.Day())
-			require.Equal(t, "TICKET-1", nwt.JIRATicketID)
+			wft, bft := nt.Parse()
+			require.Nil(t, bft)
+			require.Equal(t, "filepath", wft.Filepath)
+			require.Equal(t, 1337, wft.LineNumber)
+			require.Equal(t, wt, wft.Line)
+			require.Equal(t, 2020, wft.Date.Year())
+			require.Equal(t, time.December, wft.Date.Month())
+			require.Equal(t, 17, wft.Date.Day())
+			require.Equal(t, "TICKET-1", wft.JIRATicketID)
 		})
 	}
 }

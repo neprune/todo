@@ -1,6 +1,7 @@
 # TODO
 
 ```
++ go run ../cmd/main.go --help
 usage: todo [<flags>] <command> [<args> ...]
 
 A command-line tool for monitoring TODOs.
@@ -16,9 +17,6 @@ Commands:
   assert well-formed-todos-only
     Fails if there are TODOs that don't conform to the expected format.
 
-  report terminal
-    Returns a report in terminal output.
-
-  report webpage [<flags>]
-    Generates a static web page for the report.
+  report
+    Generate a report.
 ```

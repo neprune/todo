@@ -1,8 +1,12 @@
 package main
 
 import (
+	"fmt"
 	conf "github.com/neprune/todo/internal/config"
 	"github.com/neprune/todo/internal/harvest"
+	table "github.com/neprune/todo/internal/table"
+	"github.com/neprune/todo/internal/todo"
+	"github.com/olekukonko/tablewriter"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
 	"os"
@@ -15,10 +19,7 @@ var (
 	assert                    = app.Command("assert", "Make an assertion.")
 	assertWellFormedTodosOnly = assert.Command("well-formed-todos-only", "Fails if there are TODOs that don't conform to the expected format.")
 
-	report         = app.Command("report", "Generate a report.")
-	reportTerminal = report.Command("terminal", "Returns a report in terminal output.")
-	reportWeb      = report.Command("webpage", "Generates a static web page for the report.")
-	webOutput      = reportWeb.Flag("out", "The path to write the web report to.").Default("index.html").Envar("TODO_WEB_OUT").Short('o').File()
+	report = app.Command("report", "Generate a report.")
 )
 
 func main() {
@@ -29,17 +30,25 @@ func main() {
 	c, err := conf.LoadFromYAMLData(configData)
 	kingpin.FatalIfError(err, "failed to parse config file %s", (*config).Name())
 
-	_, err = harvest.TodosFromGlobPatterns(c.SrcGlobPatterns)
+	ts, err := harvest.TodosFromGlobPatterns(c.SrcGlobPatterns)
 	kingpin.FatalIfError(err, "failed to harvest todos")
 
-	switch cmd {
-	case reportTerminal.FullCommand():
-		break
+	_, bfts := todo.ParseAllTodos(ts...)
 
-	case reportWeb.FullCommand():
+	switch cmd {
+	case report.FullCommand():
 		break
 
 	case assertWellFormedTodosOnly.FullCommand():
-		break
+		if len(bfts) == 0 {
+			fmt.Println("No badly formed todos found!")
+		}
+		t := tablewriter.NewWriter(os.Stdout)
+		table.WriteBadlyFormedTodoTable(bfts, t)
+		fmt.Println()
+		fmt.Printf("%d badly formed todos found:\n", len(bfts))
+		t.Render()
+		fmt.Println()
+		kingpin.Fatalf("Assertion failed")
 	}
 }
