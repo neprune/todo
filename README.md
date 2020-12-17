@@ -11,9 +11,6 @@ Commands:
   help [<command>...]
     Show help.
 
-  check config-format
-    Check the config format is well-formed.
-
   report terminal
     Returns a report in terminal output.
 
