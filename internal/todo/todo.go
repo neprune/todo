@@ -69,6 +69,11 @@ func (b *BadlyFormedTodo) String() string {
 	return fmt.Sprintf("%s <parse error: %s>", b.Todo, b.ParseError)
 }
 
+// GithubLocURL returns the URL of the associated LOC.
+func (b *BadlyFormedTodo) GithubLocURL(githubRepoUrl string, commitOrBranch string) string {
+	return github.GenerateLOCGithubURL(githubRepoUrl, commitOrBranch, b.Filepath, b.LineNumber)
+}
+
 // NewTodo creates a new todo, checking that the line is valid.
 func NewTodo(line string, filepath string, number int) (*Todo, error) {
 	if !strings.Contains(line, "TODO") {

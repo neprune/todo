@@ -14,5 +14,5 @@ func GetCommit(dir string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to get head: %w", err)
 	}
-	return h.Name().Short(), nil
+	return h.Hash().String(), nil
 }

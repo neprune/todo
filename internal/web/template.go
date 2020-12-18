@@ -30,7 +30,7 @@ const reportTemplate string = `
    {{ range .Hygiene.BadlyFormedTodos }}
    <tbody>
 		<tr>
-			<th scope="row">{{ .Filepath }}:{{ .LineNumber }}</th>
+			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Line }}</td>
 			<td>{{ .ParseError }}</td>
 		</tr>
