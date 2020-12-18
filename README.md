@@ -24,6 +24,7 @@ Set `JIRA_USERNAME` and `JIRA_TOKEN` environment variables for credentials.
 Run `todo report`:
 ```
 > todo report
+
 Hygiene Report:
 ===============
 
@@ -34,20 +35,20 @@ The 6 badly formed TODOs are:
 +--------------------------------+--------------------------------+--------------------------------+
 |            LOCATION            |              LINE              |          PARSE ERROR           |
 +--------------------------------+--------------------------------+--------------------------------+
-| badly_formed_todos/todos.txt:6 | // TODO(TICKET-1 12-2-2020):   | failed to parse as TODO(<JIRA  |
-|                                | asdfdsds                       | TICKET ID> <YYYY-MM-DD>):      |
+| badly_formed_todos/todos.txt:1 | // TODO(one): one              | failed to parse as TODO(<JIRA  |
+|                                |                                | TICKET ID> <YYYY-MM-DD>):      |
 |                                |                                | <TICKET DETAIL>                |
-| badly_formed_todos/todos.txt:6 | // TODO(TICKET-1 12-2-2020):   | failed to parse as TODO(<JIRA  |
-|                                | asdfdsds                       | TICKET ID> <YYYY-MM-DD>):      |
+| badly_formed_todos/todos.txt:2 | // TODO(two ): two             | failed to parse as TODO(<JIRA  |
+|                                |                                | TICKET ID> <YYYY-MM-DD>):      |
 |                                |                                | <TICKET DETAIL>                |
-| badly_formed_todos/todos.txt:6 | // TODO(TICKET-1 12-2-2020):   | failed to parse as TODO(<JIRA  |
-|                                | asdfdsds                       | TICKET ID> <YYYY-MM-DD>):      |
+| badly_formed_todos/todos.txt:3 | # TODO: three                  | failed to parse as TODO(<JIRA  |
+|                                |                                | TICKET ID> <YYYY-MM-DD>):      |
 |                                |                                | <TICKET DETAIL>                |
-| badly_formed_todos/todos.txt:6 | // TODO(TICKET-1 12-2-2020):   | failed to parse as TODO(<JIRA  |
-|                                | asdfdsds                       | TICKET ID> <YYYY-MM-DD>):      |
+| badly_formed_todos/todos.txt:4 |    # TODO: four                | failed to parse as TODO(<JIRA  |
+|                                |                                | TICKET ID> <YYYY-MM-DD>):      |
 |                                |                                | <TICKET DETAIL>                |
-| badly_formed_todos/todos.txt:6 | // TODO(TICKET-1 12-2-2020):   | failed to parse as TODO(<JIRA  |
-|                                | asdfdsds                       | TICKET ID> <YYYY-MM-DD>):      |
+| badly_formed_todos/todos.txt:5 | <--TODO: five -->              | failed to parse as TODO(<JIRA  |
+|                                |                                | TICKET ID> <YYYY-MM-DD>):      |
 |                                |                                | <TICKET DETAIL>                |
 | badly_formed_todos/todos.txt:6 | // TODO(TICKET-1 12-2-2020):   | failed to parse date as        |
 |                                | asdfdsds                       | yyyy-mm-dd                     |
@@ -59,37 +60,37 @@ Age Report:
 
 There are 2 TODOs older than 30 days.
 
-+--------------------------------+---------+-------------+--------+
-|            LOCATION            |   AGE   | JIRA TICKET | DETAIL |
-+--------------------------------+---------+-------------+--------+
-| badly_formed_todos/todos.txt:6 | 33 days | OS-1817     | two    |
-| badly_formed_todos/todos.txt:6 | 34 days | ASDF-123    | one    |
-+--------------------------------+---------+-------------+--------+
++-------------------------------+---------+-------------+--------+
+|           LOCATION            |   AGE   | JIRA TICKET | DETAIL |
++-------------------------------+---------+-------------+--------+
+| well_formed_todos/todos.txt:5 | 33 days | OS-1817     | two    |
+| well_formed_todos/todos.txt:2 | 34 days | ASDF-123    | one    |
++-------------------------------+---------+-------------+--------+
 
 
 JIRA Report:
 ===============
 
 TODOs with done issues:
-+--------------------------------+---------+-------------+--------+
-|            LOCATION            |   AGE   | JIRA TICKET | DETAIL |
-+--------------------------------+---------+-------------+--------+
-| badly_formed_todos/todos.txt:6 | 33 days | OS-1817     | two    |
-+--------------------------------+---------+-------------+--------+
++-------------------------------+---------+-------------+--------+
+|           LOCATION            |   AGE   | JIRA TICKET | DETAIL |
++-------------------------------+---------+-------------+--------+
+| well_formed_todos/todos.txt:5 | 33 days | OS-1817     | two    |
++-------------------------------+---------+-------------+--------+
 
 TODOs with closed issues:
-+--------------------------------+--------+-------------+----------+
-|            LOCATION            |  AGE   | JIRA TICKET |  DETAIL  |
-+--------------------------------+--------+-------------+----------+
-| badly_formed_todos/todos.txt:6 | 2 days | OS-1493     | three */ |
-+--------------------------------+--------+-------------+----------+
++-------------------------------+--------+-------------+----------+
+|           LOCATION            |  AGE   | JIRA TICKET |  DETAIL  |
++-------------------------------+--------+-------------+----------+
+| well_formed_todos/todos.txt:8 | 2 days | OS-1493     | three */ |
++-------------------------------+--------+-------------+----------+
 
 TODOs with missing issues:
-+--------------------------------+---------+-------------+--------+
-|            LOCATION            |   AGE   | JIRA TICKET | DETAIL |
-+--------------------------------+---------+-------------+--------+
-| badly_formed_todos/todos.txt:6 | 34 days | ASDF-123    | one    |
-+--------------------------------+---------+-------------+--------+
++-------------------------------+---------+-------------+--------+
+|           LOCATION            |   AGE   | JIRA TICKET | DETAIL |
++-------------------------------+---------+-------------+--------+
+| well_formed_todos/todos.txt:2 | 34 days | ASDF-123    | one    |
++-------------------------------+---------+-------------+--------+
 ```
 
 You can also run assertions which can be useful for in local checks / CI:

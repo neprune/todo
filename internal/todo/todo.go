@@ -33,7 +33,7 @@ func (t *Todo) String() string {
 
 // WellFormedTodo represents a well-formed todo.
 type WellFormedTodo struct {
-	*Todo
+	Todo
 
 	// JIRATicketID is the ID of the JIRA ticket associated with the todo.
 	JIRATicketID string
@@ -49,7 +49,7 @@ func (w *WellFormedTodo) String() string {
 
 // BadlyFormedTodo represents a badly-formed todo.
 type BadlyFormedTodo struct {
-	*Todo
+	Todo
 	// ParseError describes the reason the todo was not well-formed.
 	ParseError error
 }
@@ -74,7 +74,7 @@ func NewTodo(line string, filepath string, number int) (*Todo, error) {
 func (t *Todo) Parse() (*WellFormedTodo, *BadlyFormedTodo) {
 	ss := wellFormedTodoPattern.FindAllStringSubmatch(t.Line, -1)
 	if len(ss) != 1 || len(ss[0]) != 4 {
-		return nil, &BadlyFormedTodo{t, fmt.Errorf("failed to parse as %s", HumanReadableFormat)}
+		return nil, &BadlyFormedTodo{*t, fmt.Errorf("failed to parse as %s", HumanReadableFormat)}
 	}
 
 	ticket := ss[0][1]
@@ -83,11 +83,11 @@ func (t *Todo) Parse() (*WellFormedTodo, *BadlyFormedTodo) {
 
 	parsedDate, err := time.Parse("2006-01-02", date)
 	if err != nil {
-		return nil, &BadlyFormedTodo{t, errors.New("failed to parse date as yyyy-mm-dd")}
+		return nil, &BadlyFormedTodo{*t, errors.New("failed to parse date as yyyy-mm-dd")}
 	}
 
 	return &WellFormedTodo{
-		t,
+		*t,
 		ticket,
 		parsedDate,
 		detail,

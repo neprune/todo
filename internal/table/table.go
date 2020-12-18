@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func location(t *todo.Todo) string {
+func location(t todo.Todo) string {
 	return fmt.Sprintf("%s:%d", t.Filepath, t.LineNumber)
 }
 
