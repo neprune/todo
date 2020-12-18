@@ -2,6 +2,7 @@ package main
 
 import (
 	conf "github.com/neprune/todo/internal/config"
+	"github.com/neprune/todo/internal/git"
 	"github.com/neprune/todo/internal/harvest"
 	rep "github.com/neprune/todo/internal/report"
 	"github.com/neprune/todo/internal/todo"
@@ -57,7 +58,11 @@ func main() {
 		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
 		jira, err := rep.GenerateJIRAReport(wfts, c.JIRAAddress, *jiraUsername, *jiraToken)
 		kingpin.FatalIfError(err, "failed to generate JIRA report")
-		kingpin.FatalIfError(web.GenerateWebPage(*hygiene, *age, *jira, *c, *reportWebOutputFilepath), "failed to generate web page")
+		dir, err := os.Getwd()
+		kingpin.FatalIfError(err, "failed to get working dir")
+		commit, err := git.GetCommit(dir)
+		kingpin.FatalIfError(err, "failed to get current git repo commit")
+		kingpin.FatalIfError(web.GenerateWebPage(*hygiene, *age, *jira, *c, *reportWebOutputFilepath, commit), "failed to generate web page")
 		break
 
 	case assertWellFormedTodosOnly.FullCommand():

@@ -1,0 +1,4 @@
+src_glob_patterns: ["test/**/*"]
+warning_age_days: 30
+jira_address: "https://improbableio.atlassian.net/"
+github_repo_address: "https://github.com/neprune/todo/"

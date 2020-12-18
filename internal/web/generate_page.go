@@ -13,9 +13,10 @@ type data struct {
 	Hygiene report.Hygiene
 	JIRA    report.JIRA
 	Config  conf.Config
+	Commit  string
 }
 
-func GenerateWebPage(hygiene report.Hygiene, age report.Age, jira report.JIRA, config conf.Config, outPath string) error {
+func GenerateWebPage(hygiene report.Hygiene, age report.Age, jira report.JIRA, config conf.Config, outPath string, commit string) error {
 	tmpl, err := template.New("report").Parse(reportTemplate)
 	if err != nil {
 		return fmt.Errorf("failed to parse report template: %w", err)
@@ -31,6 +32,7 @@ func GenerateWebPage(hygiene report.Hygiene, age report.Age, jira report.JIRA, c
 		Hygiene: hygiene,
 		JIRA:    jira,
 		Config:  config,
+		Commit:  commit,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to render web page template: %w", err)

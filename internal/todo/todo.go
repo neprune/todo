@@ -3,6 +3,7 @@ package todo
 import (
 	"errors"
 	"fmt"
+	"github.com/neprune/todo/internal/github"
 	"regexp"
 	"strings"
 	"time"
@@ -46,6 +47,11 @@ type WellFormedTodo struct {
 // Age returns the number of days since the TODO was created.
 func (w *WellFormedTodo) Age() int {
 	return int(time.Since(w.Date).Hours() / 24)
+}
+
+// GithubLocURL returns the URL of the associated LOC.
+func (w *WellFormedTodo) GithubLocURL(githubRepoUrl string, commitOrBranch string) string {
+	return github.GenerateLOCGithubURL(githubRepoUrl, commitOrBranch, w.Filepath, w.LineNumber)
 }
 
 func (w *WellFormedTodo) String() string {

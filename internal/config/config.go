@@ -13,6 +13,8 @@ type Config struct {
 	WarningAgeDays int `yaml:"warning_age_days"`
 	// JIRAAddress is the address to use for JIRA API calls.
 	JIRAAddress string `yaml:"jira_address"`
+	// GithubRepoAddress is the address used to make links to LOCs.
+	GithubRepoAddress string `yaml:"github_repo_address"`
 }
 
 // LoadFromYAMLData loads a config from the given YAML data, returning an error if it fails or is invalid.
@@ -34,6 +36,9 @@ func (c *Config) valid() error {
 	}
 	if c.JIRAAddress == "" {
 		return errors.New("config is invalid: no jira_address given")
+	}
+	if c.GithubRepoAddress == "" {
+		return errors.New("config is invalid: no github_repo_address given")
 	}
 	return nil
 }

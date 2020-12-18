@@ -53,7 +53,7 @@ const reportTemplate string = `
    {{ range .Age.TodosExceedingWarningAgeSortedByOldestFirst }}
    <tbody>
 		<tr>
-			<th scope="row">{{ .Filepath }}:{{ .LineNumber }}</th>
+			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Age }}</td>
 			<td>{{ .JIRATicketID }}</td>
 			<td>{{ .Detail }}</td>
@@ -77,7 +77,7 @@ const reportTemplate string = `
    {{ range .JIRA.TodosWithMissingIssues }}
    <tbody>
 		<tr>
-			<th scope="row">{{ .Filepath }}:{{ .LineNumber }}</th>
+			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Age }}</td>
 			<td>{{ .JIRATicketID }}</td>
 			<td>{{ .Detail }}</td>
@@ -99,7 +99,7 @@ const reportTemplate string = `
    {{ range .JIRA.TodosWithClosedIssues }}
    <tbody>
 		<tr>
-			<th scope="row">{{ .Filepath }}:{{ .LineNumber }}</th>
+			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Age }}</td>
 			<td>{{ .JIRATicketID }}</td>
 			<td>{{ .Detail }}</td>
@@ -121,7 +121,7 @@ const reportTemplate string = `
    {{ range .JIRA.TodosWithDoneIssues }}
    <tbody>
 		<tr>
-			<th scope="row">{{ .Filepath }}:{{ .LineNumber }}</th>
+			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Age }}</td>
 			<td>{{ .JIRATicketID }}</td>
 			<td>{{ .Detail }}</td>
