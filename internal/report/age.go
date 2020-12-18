@@ -12,18 +12,15 @@ import (
 
 // Age reports on old TODOs.
 type Age struct {
-	// NumberOfTodosExceedingWarningAge is the number of TODOs that are older than the configured number of days to
-	// warn after.
-	NumberOfTodosExceedingWarningAge int
 	// TodosExceedingWarningAgeSortedByOldestFirst are the todos in descending order of age.
-	TodosExceedingWarningAgeSortedByOldestFirst []*todo.WellFormedTodo
+	TodosExceedingWarningAgeSortedByOldestFirst []todo.WellFormedTodo
 	// WarningDays is the number of days after which a TODO will trigger a warning.
 	WarningDays int
 }
 
 // GenerateAgeReport generates a Age report.
-func GenerateAgeReport(wfts []*todo.WellFormedTodo, warningDays int) *Age {
-	var old []*todo.WellFormedTodo
+func GenerateAgeReport(wfts []todo.WellFormedTodo, warningDays int) *Age {
+	var old []todo.WellFormedTodo
 	for _, wft := range wfts {
 		if time.Since(wft.Date).Hours() > float64(warningDays*24) {
 			old = append(old, wft)
@@ -33,7 +30,6 @@ func GenerateAgeReport(wfts []*todo.WellFormedTodo, warningDays int) *Age {
 		return old[i].Date.After(old[j].Date)
 	})
 	return &Age{
-		NumberOfTodosExceedingWarningAge:            len(old),
 		TodosExceedingWarningAgeSortedByOldestFirst: old,
 		WarningDays: warningDays,
 	}
@@ -47,7 +43,7 @@ func (a *Age) OutputToTerminal() {
 	fmt.Println("Age Report:")
 	fmt.Println("===============")
 	fmt.Println()
-	fmt.Printf("There are %d TODOs older than %d days.\n", a.NumberOfTodosExceedingWarningAge, a.WarningDays)
+	fmt.Printf("There are %d TODOs older than %d days.\n", len(a.TodosExceedingWarningAgeSortedByOldestFirst), a.WarningDays)
 	fmt.Println()
 	t.Render()
 	fmt.Println()

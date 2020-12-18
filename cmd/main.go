@@ -11,8 +11,10 @@ import (
 )
 
 var (
-	app    = kingpin.New("todo", "A command-line tool for monitoring TODOs.")
-	config = app.Flag("config", "The path to the config file.").Default("todo.yaml").Envar("TODO_CONFIG").Short('c').File()
+	app          = kingpin.New("todo", "A command-line tool for monitoring TODOs.")
+	config       = app.Flag("config", "The path to the config file.").Default("todo.yaml").Envar("TODO_CONFIG").Short('c').File()
+	jiraUsername = app.Flag("jira-username", "The username to use to login to JIRA.").Envar("JIRA_USERNAME").String()
+	jiraPassword = app.Flag("jira-password", "The password to use to login to JIRA.").Envar("JIRA_PASSWORD").String()
 
 	assert                    = app.Command("assert", "Make an assertion.")
 	assertWellFormedTodosOnly = assert.Command("well-formed-todos-only", "Fails if there are TODOs that don't conform to the expected format.")
@@ -40,19 +42,22 @@ func main() {
 		hygiene.OutputToTerminal()
 		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
 		age.OutputToTerminal()
+		jira, err := rep.GenerateJIRAReport(wfts, c.JIRAAddress, *jiraUsername, *jiraPassword)
+		kingpin.FatalIfError(err, "failed to generate JIRA report")
+		jira.OutputToTerminal()
 		break
 
 	case assertWellFormedTodosOnly.FullCommand():
 		hygiene := rep.GenerateHygieneReport(wfts, bfts)
 		hygiene.OutputToTerminal()
-		if hygiene.NumberOfBadlyFormedTodos > 0 {
+		if len(hygiene.BadlyFormedTodos) > 0 {
 			kingpin.Fatalf("Assertion failed")
 		}
 
 	case assertNoOldTodos.FullCommand():
 		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
 		age.OutputToTerminal()
-		if age.NumberOfTodosExceedingWarningAge > 0 {
+		if len(age.TodosExceedingWarningAgeSortedByOldestFirst) > 0 {
 			kingpin.Fatalf("Assertion failed")
 		}
 	}

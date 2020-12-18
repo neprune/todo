@@ -9,8 +9,8 @@ import (
 )
 
 // TodosFromGlobPatterns harvests all todos using the given glob patterns.
-func TodosFromGlobPatterns(globPatterns []string) ([]*todo.Todo, error) {
-	var todos []*todo.Todo
+func TodosFromGlobPatterns(globPatterns []string) ([]todo.Todo, error) {
+	var todos []todo.Todo
 
 	for _, p := range globPatterns {
 		ts, err := TodosFromGlobPattern(p)
@@ -23,8 +23,8 @@ func TodosFromGlobPatterns(globPatterns []string) ([]*todo.Todo, error) {
 }
 
 // TodosFromGlobPattern harvests all todos in files found under the given glob pattern.
-func TodosFromGlobPattern(globPattern string) ([]*todo.Todo, error) {
-	var todos []*todo.Todo
+func TodosFromGlobPattern(globPattern string) ([]todo.Todo, error) {
+	var todos []todo.Todo
 
 	ms, err := filepath.Glob(globPattern)
 	if err != nil {
@@ -42,8 +42,8 @@ func TodosFromGlobPattern(globPattern string) ([]*todo.Todo, error) {
 }
 
 // TodosFromFile harvests all todos in a given file.
-func TodosFromFile(filename string) ([]*todo.Todo, error) {
-	var todos []*todo.Todo
+func TodosFromFile(filename string) ([]todo.Todo, error) {
+	var todos []todo.Todo
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -60,7 +60,7 @@ func TodosFromFile(filename string) ([]*todo.Todo, error) {
 			if err != nil {
 				return todos, err
 			}
-			todos = append(todos, t)
+			todos = append(todos, *t)
 		}
 	}
 	return todos, nil

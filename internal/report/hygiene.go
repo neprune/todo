@@ -12,21 +12,18 @@ import (
 type Hygiene struct {
 	// NumberOfTodos is the total number of TODOs.
 	NumberOfTodos int
-	// NumberOfBadlyFormedTodods is the total number of badly formed TODOs.
-	NumberOfBadlyFormedTodos int
 	// PercentageWellFormed is the percentage of TODOs that are well formed.
 	PercentageWellFormed float32
 	// BadlyFormedTodos are the badly formed todos.
-	BadlyFormedTodos []*todo.BadlyFormedTodo
+	BadlyFormedTodos []todo.BadlyFormedTodo
 }
 
 // GenerateHygeineReport generates a Hygiene report.
-func GenerateHygieneReport(wfts []*todo.WellFormedTodo, bfts []*todo.BadlyFormedTodo) *Hygiene {
+func GenerateHygieneReport(wfts []todo.WellFormedTodo, bfts []todo.BadlyFormedTodo) *Hygiene {
 	return &Hygiene{
-		NumberOfTodos:            len(wfts) + len(bfts),
-		NumberOfBadlyFormedTodos: len(bfts),
-		PercentageWellFormed:     (float32(len(wfts)) / float32(len(bfts)+len(wfts))) * 100,
-		BadlyFormedTodos:         bfts,
+		NumberOfTodos:        len(wfts) + len(bfts),
+		PercentageWellFormed: (float32(len(wfts)) / float32(len(bfts)+len(wfts))) * 100,
+		BadlyFormedTodos:     bfts,
 	}
 }
 
@@ -40,7 +37,7 @@ func (h *Hygiene) OutputToTerminal() {
 	fmt.Println()
 	fmt.Printf("There are %d TODOs in total.\n", h.NumberOfTodos)
 	fmt.Printf("%.2f%% TODOs are well formed.\n", h.PercentageWellFormed)
-	fmt.Printf("The %d badly formed TODOs are:\n", h.NumberOfBadlyFormedTodos)
+	fmt.Printf("The %d badly formed TODOs are:\n", len(h.BadlyFormedTodos))
 	fmt.Println()
 	t.Render()
 	fmt.Println()

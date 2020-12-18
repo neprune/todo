@@ -95,15 +95,15 @@ func (t *Todo) Parse() (*WellFormedTodo, *BadlyFormedTodo) {
 }
 
 // ParseAllTodos parses all given todos and returns the BadlyFormedTodos and the WellFormedTodos.
-func ParseAllTodos(todos ...*Todo) ([]*WellFormedTodo, []*BadlyFormedTodo) {
-	var bfts []*BadlyFormedTodo
-	var wfts []*WellFormedTodo
+func ParseAllTodos(todos ...Todo) ([]WellFormedTodo, []BadlyFormedTodo) {
+	var bfts []BadlyFormedTodo
+	var wfts []WellFormedTodo
 	for _, t := range todos {
 		wft, bft := t.Parse()
 		if bft != nil {
-			bfts = append(bfts, bft)
+			bfts = append(bfts, *bft)
 		} else {
-			wfts = append(wfts, wft)
+			wfts = append(wfts, *wft)
 		}
 	}
 	return wfts, bfts

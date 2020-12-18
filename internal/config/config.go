@@ -11,6 +11,8 @@ type Config struct {
 	SrcGlobPatterns []string `yaml:"src_glob_patterns"`
 	// WarningAgeDays is the number of days after which an unresolved TODO will result in a warning.
 	WarningAgeDays int `yaml:"warning_age_days"`
+	// JIRAAddress is the address to use for JIRA API calls.
+	JIRAAddress string `yaml:"jira_address"`
 }
 
 // LoadFromYAMLData loads a config from the given YAML data, returning an error if it fails or is invalid.
@@ -29,6 +31,9 @@ func (c *Config) valid() error {
 	}
 	if c.WarningAgeDays <= 0 {
 		return errors.New("config is invalid: no warning_age_days given or non-positive value given")
+	}
+	if c.JIRAAddress == "" {
+		return errors.New("config is invalid: no jira_address given")
 	}
 	return nil
 }
