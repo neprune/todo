@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/neprune/todo/internal/github"
+	"github.com/neprune/todo/internal/jira"
 	"regexp"
 	"strings"
 	"time"
@@ -52,6 +53,11 @@ func (w *WellFormedTodo) Age() int {
 // GithubLocURL returns the URL of the associated LOC.
 func (w *WellFormedTodo) GithubLocURL(githubRepoUrl string, commitOrBranch string) string {
 	return github.GenerateLOCGithubURL(githubRepoUrl, commitOrBranch, w.Filepath, w.LineNumber)
+}
+
+// JIRATicketURL returns a URL to the associated JIRA ticket.
+func (w *WellFormedTodo) JIRATicketURL(jiraURL string) string {
+	return jira.GenerateJIRATicketURL(jiraURL, w.JIRATicketID)
 }
 
 func (w *WellFormedTodo) String() string {

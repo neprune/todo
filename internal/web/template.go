@@ -56,6 +56,7 @@ const reportTemplate string = `
 			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Age }}</td>
 			<td>{{ .JIRATicketID }}</td>
+			<td><a href="{{ .JIRATicketURL  $.Config.JIRAAddress }}">{{ .JIRATicketID }}</a></td>
 			<td>{{ .Detail }}</td>
 		</tr>
    </tbody>
@@ -101,7 +102,7 @@ const reportTemplate string = `
 		<tr>
 			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Age }}</td>
-			<td>{{ .JIRATicketID }}</td>
+			<td><a href="{{ .JIRATicketURL  $.Config.JIRAAddress }}">{{ .JIRATicketID }}</a></td>
 			<td>{{ .Detail }}</td>
 		</tr>
    </tbody>
@@ -123,7 +124,7 @@ const reportTemplate string = `
 		<tr>
 			<th scope="row"><a href="{{ .GithubLocURL  $.Config.GithubRepoAddress $.Commit }}">{{ .Filepath }}:{{ .LineNumber }}</a></th>
 			<td>{{ .Age }}</td>
-			<td>{{ .JIRATicketID }}</td>
+			<td><a href="{{ .JIRATicketURL  $.Config.JIRAAddress }}">{{ .JIRATicketID }}</a></td>
 			<td>{{ .Detail }}</td>
 		</tr>
    </tbody>
