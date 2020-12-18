@@ -1,1 +1,2 @@
 src_glob_patterns: ["well_formed_todos/*", "badly_formed_todos/*"]
+warning_age_days: 30

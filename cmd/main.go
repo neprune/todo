@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	conf "github.com/neprune/todo/internal/config"
 	"github.com/neprune/todo/internal/harvest"
-	table "github.com/neprune/todo/internal/table"
+	rep "github.com/neprune/todo/internal/report"
 	"github.com/neprune/todo/internal/todo"
-	"github.com/olekukonko/tablewriter"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
 	"os"
@@ -33,22 +31,17 @@ func main() {
 	ts, err := harvest.TodosFromGlobPatterns(c.SrcGlobPatterns)
 	kingpin.FatalIfError(err, "failed to harvest todos")
 
-	_, bfts := todo.ParseAllTodos(ts...)
+	wfts, bfts := todo.ParseAllTodos(ts...)
+	hygiene := rep.GenerateHygieneReport(wfts, bfts)
+	hygiene.OutputToTerminal()
 
 	switch cmd {
 	case report.FullCommand():
 		break
 
 	case assertWellFormedTodosOnly.FullCommand():
-		if len(bfts) == 0 {
-			fmt.Println("No badly formed todos found!")
+		if hygiene.NumberOfBadlyFormedTodos > 0 {
+			kingpin.Fatalf("Assertion failed")
 		}
-		t := tablewriter.NewWriter(os.Stdout)
-		table.WriteBadlyFormedTodoTable(bfts, t)
-		fmt.Println()
-		fmt.Printf("%d badly formed todos found:\n", len(bfts))
-		t.Render()
-		fmt.Println()
-		kingpin.Fatalf("Assertion failed")
 	}
 }
