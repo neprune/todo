@@ -2,7 +2,7 @@
 
 A CLI tool that lets you keep on top of your TODOs.
 
-Set up a `todo.yaml` config in your repo:
+Set up a `todo.yaml` config in the root of your repo:
 ```
 # Glob patterns that will match with files containing your source code.
 src_glob_patterns:
@@ -13,6 +13,9 @@ warning_age_days: 30
 
 # The base URL to your JIRA.
 jira_address: "https://my.jira.com"
+
+# The URL to your Github Repo for generating links to LOCs in the webpage.
+jira_address: "https://github.com/neprune/todo/"
 ```
 
 The tool works on TODOs in the form `TODO(<JIRA Ticket ID> <DATE YYYY-MM-DD>): <DETAIL>` - update some to this format in your repo.
@@ -21,7 +24,7 @@ Set `JIRA_USERNAME` and `JIRA_TOKEN` environment variables for credentials.
 
 > You can generate a token for your JIRA [here](https://id.atlassian.com/manage/api-tokens).
 
-Run `todo report web -o=index.html` to generate a static web page:
+Run `todo report web -o=index.html` to generate a static web page with links to LOCs in Github and the tickets in JIRA:
 
 ![Demo](images/demo.png "Demo")
 
@@ -104,7 +107,7 @@ You can also run assertions which can be useful for in local checks / CI:
 * `todo assert consistent-with-jira` asserts that there are no TODOs with missing or completed tickets.
 
 What's next:
-* Make the webpage look better and include links to GH LOCs and JIRA tickets
+* Make the webpage look better
 * Turn into a plug and play GH action
 * Turn into pre-commit
 
