@@ -21,9 +21,9 @@ Set `JIRA_USERNAME` and `JIRA_TOKEN` environment variables for credentials.
 
 > You can generate a token for your JIRA [here](https://id.atlassian.com/manage/api-tokens).
 
-Run `todo report`:
+Run `todo report terminal`:
 ```
-> todo report
+> todo report terminal
 
 Hygiene Report:
 ===============
@@ -111,12 +111,11 @@ usage: todo [<flags>] <command> [<args> ...]
 A command-line tool for monitoring TODOs.
 
 Flags:
-      --help              Show context-sensitive help (also try --help-long and --help-man).
-  -c, --config=todo.yaml  The path to the config file.
+      --help                   Show context-sensitive help (also try --help-long and --help-man).
+  -c, --config=todo.yaml       The path to the config file.
       --jira-username=JIRA-USERNAME  
-                          The username to use to login to JIRA.
-      --jira-password=JIRA-PASSWORD  
-                          The password to use to login to JIRA.
+                               The username to use to login to JIRA.
+      --jira-token=JIRA-TOKEN  The token to use to login to JIRA.
 
 Commands:
   help [<command>...]
@@ -131,6 +130,9 @@ Commands:
   assert consistent-with-jira
     Fails if there are TODOs with non-existent or complete tickets.
 
-  report
-    Generate a report.
+  report terminal
+    Output the report to terminal.
+
+  report web [<flags>]
+    Generate a static web page for the report.
 ```

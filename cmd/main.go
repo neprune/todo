@@ -5,6 +5,7 @@ import (
 	"github.com/neprune/todo/internal/harvest"
 	rep "github.com/neprune/todo/internal/report"
 	"github.com/neprune/todo/internal/todo"
+	"github.com/neprune/todo/internal/web"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
 	"os"
@@ -21,7 +22,10 @@ var (
 	assertNoOldTodos          = assert.Command("no-old-todos", "Fails if there are any TODOs exceeding the warning limit..")
 	assertConsistentWithJIRA  = assert.Command("consistent-with-jira", "Fails if there are TODOs with non-existent or complete tickets.")
 
-	report = app.Command("report", "Generate a report.")
+	report                  = app.Command("report", "Generate a report.")
+	reportTerminal          = report.Command("terminal", "Output the report to terminal.")
+	reportWeb               = report.Command("web", "Generate a static web page for the report.")
+	reportWebOutputFilepath = reportWeb.Flag("web-output-filepath", "The filepath to write the webpage to.").Default("index.html").Short('o').String()
 )
 
 func main() {
@@ -38,7 +42,7 @@ func main() {
 	wfts, bfts := todo.ParseAllTodos(ts...)
 
 	switch cmd {
-	case report.FullCommand():
+	case reportTerminal.FullCommand():
 		hygiene := rep.GenerateHygieneReport(wfts, bfts)
 		hygiene.OutputToTerminal()
 		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
@@ -46,6 +50,14 @@ func main() {
 		jira, err := rep.GenerateJIRAReport(wfts, c.JIRAAddress, *jiraUsername, *jiraToken)
 		kingpin.FatalIfError(err, "failed to generate JIRA report")
 		jira.OutputToTerminal()
+		break
+
+	case reportWeb.FullCommand():
+		hygiene := rep.GenerateHygieneReport(wfts, bfts)
+		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
+		jira, err := rep.GenerateJIRAReport(wfts, c.JIRAAddress, *jiraUsername, *jiraToken)
+		kingpin.FatalIfError(err, "failed to generate JIRA report")
+		kingpin.FatalIfError(web.GenerateWebPage(*hygiene, *age, *jira, *c, *reportWebOutputFilepath), "failed to generate web page")
 		break
 
 	case assertWellFormedTodosOnly.FullCommand():
