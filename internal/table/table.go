@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/neprune/todo/internal/todo"
 	"github.com/olekukonko/tablewriter"
-	"math"
 	"time"
 )
 
@@ -22,6 +21,7 @@ func WriteBadlyFormedTodoTable(bfts []*todo.BadlyFormedTodo, t *tablewriter.Tabl
 func WriteWellFormedTodoTable(bfts []*todo.WellFormedTodo, t *tablewriter.Table) {
 	t.SetHeader([]string{"Location", "Age", "JIRA Ticket", "Detail"})
 	for _, bft := range bfts {
-		t.Append([]string{location(bft.Todo), fmt.Sprintf("%d days", math.Floor(time.Since(bft.Date).Hours())/24), bft.JIRATicketID, bft.Detail})
+		days := int(time.Since(bft.Date).Hours() / 24)
+		t.Append([]string{location(bft.Todo), fmt.Sprintf("%d days", days), bft.JIRATicketID, bft.Detail})
 	}
 }

@@ -16,6 +16,7 @@ var (
 
 	assert                    = app.Command("assert", "Make an assertion.")
 	assertWellFormedTodosOnly = assert.Command("well-formed-todos-only", "Fails if there are TODOs that don't conform to the expected format.")
+	assertNoOldTodos          = assert.Command("no-old-todos", "Fails if there are any TODOs exceeding the warning limit..")
 
 	report = app.Command("report", "Generate a report.")
 )
@@ -45,6 +46,13 @@ func main() {
 		hygiene := rep.GenerateHygieneReport(wfts, bfts)
 		hygiene.OutputToTerminal()
 		if hygiene.NumberOfBadlyFormedTodos > 0 {
+			kingpin.Fatalf("Assertion failed")
+		}
+
+	case assertNoOldTodos.FullCommand():
+		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
+		age.OutputToTerminal()
+		if age.NumberOfTodosExceedingWarningAge > 0 {
 			kingpin.Fatalf("Assertion failed")
 		}
 	}
