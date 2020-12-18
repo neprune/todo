@@ -14,11 +14,12 @@ var (
 	app          = kingpin.New("todo", "A command-line tool for monitoring TODOs.")
 	config       = app.Flag("config", "The path to the config file.").Default("todo.yaml").Envar("TODO_CONFIG").Short('c').File()
 	jiraUsername = app.Flag("jira-username", "The username to use to login to JIRA.").Envar("JIRA_USERNAME").String()
-	jiraPassword = app.Flag("jira-password", "The password to use to login to JIRA.").Envar("JIRA_PASSWORD").String()
+	jiraToken    = app.Flag("jira-token", "The token to use to login to JIRA.").Envar("JIRA_TOKEN").String()
 
 	assert                    = app.Command("assert", "Make an assertion.")
 	assertWellFormedTodosOnly = assert.Command("well-formed-todos-only", "Fails if there are TODOs that don't conform to the expected format.")
 	assertNoOldTodos          = assert.Command("no-old-todos", "Fails if there are any TODOs exceeding the warning limit..")
+	assertConsistentWithJIRA  = assert.Command("consistent-with-jira", "Fails if there are TODOs with non-existent or complete tickets.")
 
 	report = app.Command("report", "Generate a report.")
 )
@@ -42,7 +43,7 @@ func main() {
 		hygiene.OutputToTerminal()
 		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
 		age.OutputToTerminal()
-		jira, err := rep.GenerateJIRAReport(wfts, c.JIRAAddress, *jiraUsername, *jiraPassword)
+		jira, err := rep.GenerateJIRAReport(wfts, c.JIRAAddress, *jiraUsername, *jiraToken)
 		kingpin.FatalIfError(err, "failed to generate JIRA report")
 		jira.OutputToTerminal()
 		break
@@ -58,6 +59,14 @@ func main() {
 		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
 		age.OutputToTerminal()
 		if len(age.TodosExceedingWarningAgeSortedByOldestFirst) > 0 {
+			kingpin.Fatalf("Assertion failed")
+		}
+
+	case assertConsistentWithJIRA.FullCommand():
+		jira, err := rep.GenerateJIRAReport(wfts, c.JIRAAddress, *jiraUsername, *jiraToken)
+		kingpin.FatalIfError(err, "failed to generate JIRA report")
+		jira.OutputToTerminal()
+		if len(jira.TodosWithMissingIssues) > 0 || len(jira.TodosWithClosedIssues) > 0 || len(jira.TodosWithDoneIssues) > 0 {
 			kingpin.Fatalf("Assertion failed")
 		}
 	}

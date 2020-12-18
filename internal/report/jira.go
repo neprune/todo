@@ -16,10 +16,10 @@ type JIRA struct {
 	TodosWithDoneIssues    []todo.WellFormedTodo
 }
 
-func GenerateJIRAReport(wfts []todo.WellFormedTodo, address string, username string, password string) (*JIRA, error) {
+func GenerateJIRAReport(wfts []todo.WellFormedTodo, address string, username string, token string) (*JIRA, error) {
 	tp := jira.BasicAuthTransport{
 		Username: username,
-		Password: password,
+		Password: token,
 	}
 	client, err := jira.NewClient(tp.Client(), address)
 	if err != nil {
@@ -30,12 +30,12 @@ func GenerateJIRAReport(wfts []todo.WellFormedTodo, address string, username str
 	var closedIssues []todo.WellFormedTodo
 	var doneIssues []todo.WellFormedTodo
 
-	for _, wft := range wfts {
-		copy := wft
+	for i, _ := range wfts {
+		wft := wfts[i]
 		issue, _, err := client.Issue.Get(wft.JIRATicketID, nil)
 
 		if err != nil && strings.Contains(err.Error(), "does not exist") || issue == nil {
-			missingIssues = append(missingIssues, copy)
+			missingIssues = append(missingIssues, wft)
 			continue
 		}
 
@@ -44,12 +44,12 @@ func GenerateJIRAReport(wfts []todo.WellFormedTodo, address string, username str
 		}
 
 		if issue.Fields.Status.Name == "Closed" {
-			closedIssues = append(closedIssues, copy)
+			closedIssues = append(closedIssues, wft)
 			continue
 		}
 
 		if issue.Fields.Status.Name == "Done" {
-			doneIssues = append(doneIssues, copy)
+			doneIssues = append(doneIssues, wft)
 			continue
 		}
 	}
@@ -62,23 +62,25 @@ func GenerateJIRAReport(wfts []todo.WellFormedTodo, address string, username str
 }
 
 func (j *JIRA) OutputToTerminal() {
-	t := tablewriter.NewWriter(os.Stdout)
 	fmt.Println()
 	fmt.Println("JIRA Report:")
 	fmt.Println("===============")
 	fmt.Println()
 
 	fmt.Println("TODOs with done issues:")
+	t := tablewriter.NewWriter(os.Stdout)
 	table.WriteWellFormedTodoTable(j.TodosWithDoneIssues, t)
 	t.Render()
 	fmt.Println()
 
 	fmt.Println("TODOs with closed issues:")
+	t = tablewriter.NewWriter(os.Stdout)
 	table.WriteWellFormedTodoTable(j.TodosWithClosedIssues, t)
 	t.Render()
 	fmt.Println()
 
 	fmt.Println("TODOs with missing issues:")
+	t = tablewriter.NewWriter(os.Stdout)
 	table.WriteWellFormedTodoTable(j.TodosWithMissingIssues, t)
 	t.Render()
 	fmt.Println()

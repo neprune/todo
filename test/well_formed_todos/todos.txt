@@ -2,7 +2,7 @@ Non existent ticket:
 // TODO(ASDF-123 2020-11-14): one
 
 Done ticket:
-#TODO(OS-1933 2020-11-15): two
+#TODO(OS-1817 2020-11-15): two
 
 Closed ticket:
 */TODO(OS-1493 2020-12-16): three */
