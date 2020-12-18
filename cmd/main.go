@@ -32,14 +32,18 @@ func main() {
 	kingpin.FatalIfError(err, "failed to harvest todos")
 
 	wfts, bfts := todo.ParseAllTodos(ts...)
-	hygiene := rep.GenerateHygieneReport(wfts, bfts)
-	hygiene.OutputToTerminal()
 
 	switch cmd {
 	case report.FullCommand():
+		hygiene := rep.GenerateHygieneReport(wfts, bfts)
+		hygiene.OutputToTerminal()
+		age := rep.GenerateAgeReport(wfts, c.WarningAgeDays)
+		age.OutputToTerminal()
 		break
 
 	case assertWellFormedTodosOnly.FullCommand():
+		hygiene := rep.GenerateHygieneReport(wfts, bfts)
+		hygiene.OutputToTerminal()
 		if hygiene.NumberOfBadlyFormedTodos > 0 {
 			kingpin.Fatalf("Assertion failed")
 		}
