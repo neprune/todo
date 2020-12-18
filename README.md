@@ -21,7 +21,12 @@ Set `JIRA_USERNAME` and `JIRA_TOKEN` environment variables for credentials.
 
 > You can generate a token for your JIRA [here](https://id.atlassian.com/manage/api-tokens).
 
-Run `todo report terminal`:
+Run `todo report web -o=index.html` to generate a static web page:
+
+![Demo](images/demo.png "Demo")
+
+
+You can also run `todo report terminal` to see the report in terminal:
 ```
 > todo report terminal
 
@@ -99,8 +104,9 @@ You can also run assertions which can be useful for in local checks / CI:
 * `todo assert consistent-with-jira` asserts that there are no TODOs with missing or completed tickets.
 
 What's next:
-* Generate a static webpage for the report- with links to the LOCs in GH and links to the JIRA tickets
+* Make the webpage look better and include links to GH LOCs and JIRA tickets
 * Turn into a plug and play GH action
+* Turn into pre-commit
 
 ## Full Usage
 

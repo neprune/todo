@@ -9,10 +9,10 @@ import (
 )
 
 type data struct {
-	age     report.Age
-	hygiene report.Hygiene
-	jira    report.JIRA
-	config  conf.Config
+	Age     report.Age
+	Hygiene report.Hygiene
+	JIRA    report.JIRA
+	Config  conf.Config
 }
 
 func GenerateWebPage(hygiene report.Hygiene, age report.Age, jira report.JIRA, config conf.Config, outPath string) error {
@@ -27,10 +27,10 @@ func GenerateWebPage(hygiene report.Hygiene, age report.Age, jira report.JIRA, c
 	defer f.Close()
 
 	err = tmpl.Execute(f, data{
-		age:     age,
-		hygiene: hygiene,
-		jira:    jira,
-		config:  config,
+		Age:     age,
+		Hygiene: hygiene,
+		JIRA:    jira,
+		Config:  config,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to render web page template: %w", err)

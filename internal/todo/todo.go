@@ -43,6 +43,11 @@ type WellFormedTodo struct {
 	Detail string
 }
 
+// Age returns the number of days since the TODO was created.
+func (w *WellFormedTodo) Age() int {
+	return int(time.Since(w.Date).Hours() / 24)
+}
+
 func (w *WellFormedTodo) String() string {
 	return fmt.Sprintf("%s %s %s %s:%d", w.Date, w.JIRATicketID, w.Detail, w.Line, w.LineNumber)
 }
