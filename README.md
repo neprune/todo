@@ -6,7 +6,7 @@ Set up a `todo.yaml` config in your repo:
 ```
 # Glob patterns that will match with files containing your source code.
 src_glob_patterns:
-- src/*
+- src/**/*
 
 # The number of days after which a warning is generated for a TODO.
 warning_age_days: 30
